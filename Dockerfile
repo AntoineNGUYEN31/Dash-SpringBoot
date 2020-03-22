@@ -1,8 +1,11 @@
-FROM python:3.7-alpine
+#FROM python:3.7-alpine
+FROM alpine:3.11
 LABEL maintainer="nguyen.ensma@gmail.com"
-RUN pip install Flask &&\
-    pip install Dash &&\
-    pip install requests
+RUN apk add openjdk8-jre
+RUN apk add python3
+RUN pip3 install Flask &&\
+    pip3 install Dash &&\
+    pip3 install requests
 #COPY src des
 #ADD src des/
 #EXPOSE 80
@@ -10,5 +13,10 @@ RUN pip install Flask &&\
 WORKDIR /app
 ADD FRONT/app.py /app
 ADD FRONT/core.py /app
+ADD BACK/target/dash-springboot-demo-0.0.1-SNAPSHOT.jar /app
+ADD start.sh /app
+#Dash port (front)
 EXPOSE 8050
-CMD ["python","app.py"]
+#Sringboot port (back)
+EXPOSE 8080
+CMD ["sh","start.sh"]
